@@ -1,6 +1,9 @@
 package niv.twinnedeffigy;
 
 import net.fabricmc.api.ModInitializer;
+import niv.twinnedeffigy.registry.ModBlockEntityTypes;
+import niv.twinnedeffigy.registry.ModBlocks;
+import niv.twinnedeffigy.registry.ModItems;
 
 import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
@@ -23,5 +26,9 @@ public class TwinnedEffigy implements ModInitializer {
         // Proceed with mild caution.
 
         LOGGER.info("[{}] Initialize", MOD_NAME);
+
+        ModBlocks.initialize();
+        ModItems.initialize();
+        ModBlockEntityTypes.initialize();
     }
 }
