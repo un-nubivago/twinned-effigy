@@ -1,0 +1,34 @@
+{
+    "schemaVersion": 1,
+    "id": "twinned-effigy",
+    "version": "${mod_version}",
+    "name": "Twinned Effigy",
+    "description": "This is an example description! Tell everyone what your mod is about!",
+    "authors": [
+        "Nubìvago"
+    ],
+    "contact": {
+        "homepage": "https://modrinth.com/mod/twinned-effigy",
+        "sources": "https://github.com/un-nubivago/twinned-effigy"
+    },
+    "license": "MIT",
+    "icon": "assets/twinned-effigy/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "niv.twinnedeffigy.TwinnedEffigy"
+        ],
+        "client": [
+            "niv.twinnedeffigy.client.TwinnedEffigyClient"
+        ],
+        "fabric-datagen": [
+            "niv.twinnedeffigy.client.TwinnedEffigyDataGenerator"
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=${loader_version}",
+        "minecraft": "~${minecraft_version}",
+        "java": ">=25",
+        "fabric-api": "*"
+    }
+}
