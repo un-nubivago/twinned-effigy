@@ -15,6 +15,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -25,7 +26,11 @@ import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext.BlockEntityTarget;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -54,6 +59,7 @@ public class TwinnedEffigyDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModModelProvider::new);
         pack.addProvider(ModEnglishLanguageProvider::new);
         pack.addProvider(ModBlockLootTableProvider::new);
+        pack.addProvider(ModRecipeProvider::new);
         pack.addProvider(ModBlockTagsProvider::new);
     }
 
@@ -131,6 +137,36 @@ public class TwinnedEffigyDataGenerator implements DataGeneratorEntrypoint {
                     .setRandomSequence(BuiltInRegistries.BLOCK.getKey(ModBlocks.TWINNED_EFFIGY).withPrefix("blocks/")));
         }
 
+    }
+
+    private static final class ModRecipeProvider extends FabricRecipeProvider {
+
+        public ModRecipeProvider(FabricPackOutput output, CompletableFuture<Provider> registriesFuture) {
+            super(output, registriesFuture);
+        }
+
+        @Override
+        public String getName() {
+            return "Recipe";
+        }
+
+        @Override
+        protected RecipeProvider createRecipeProvider(Provider registries, RecipeOutput output) {
+            return new RecipeProvider(registries, output) {
+                @Override
+                public void buildRecipes() {
+                    shaped(RecipeCategory.MISC, ModItems.TWINNED_EFFIGY)
+                            .pattern("###")
+                            .pattern("#@#")
+                            .pattern("###")
+                            .define('#', Items.CHISELED_STONE_BRICKS)
+                            .define('@', Items.ENDER_EYE)
+                            .unlockedBy(getHasName(Items.CHISELED_STONE_BRICKS), has(Items.CHISELED_STONE_BRICKS))
+                            .unlockedBy(getHasName(Items.ENDER_EYE), has(Items.ENDER_EYE))
+                            .save(output);
+                }
+            };
+        }
     }
 
     private static final class ModBlockTagsProvider extends FabricTagsProvider<Block> {

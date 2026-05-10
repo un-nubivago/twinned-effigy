@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chiseled_stone_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:chiseled_stone_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_ender_eye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:ender_eye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "twinned_effigy:twinned_effigy"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chiseled_stone_bricks",
+      "has_ender_eye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "twinned_effigy:twinned_effigy"
+    ]
+  }
+}

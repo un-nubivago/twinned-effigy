@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:chiseled_stone_bricks",
+    "@": "minecraft:ender_eye"
+  },
+  "pattern": [
+    "###",
+    "#@#",
+    "###"
+  ],
+  "result": {
+    "id": "twinned_effigy:twinned_effigy"
+  }
+}
