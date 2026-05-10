@@ -12,6 +12,8 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.component.ResolvableProfile;
@@ -47,12 +49,13 @@ public class TwinnedEffigyBlockEntity extends BlockEntity {
         if (canUnlock(this.getBlockPos().getCenter(), player, this.lockKey)) {
             var wasBound = this.profile != null;
 
-            if (this.profile == null)
-                this.profile = ResolvableProfile.createResolved(player.getGameProfile());
-            else if (this.profile.partialProfile().id() == player.getGameProfile().id())
+            if (this.profile != null && this.profile.partialProfile().id() == player.getGameProfile().id()) {
                 this.profile = null;
-            else
+                level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.BLOCKS);
+            } else {
                 this.profile = ResolvableProfile.createResolved(player.getGameProfile());
+                level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS);
+            }
 
             var isBound = this.profile != null;
             if (wasBound != isBound)

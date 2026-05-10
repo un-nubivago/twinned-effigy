@@ -83,14 +83,11 @@ public class TwinnedEffigyBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(
             BlockState state, Level level, BlockPos pos,
             Player player, BlockHitResult hitResult) {
-        if (level.isClientSide())
+        if (level.isClientSide() || level.getBlockEntity(pos, ModBlockEntityTypes.TWINNED_EFFIGY)
+                .filter(entity -> entity.useWithoutItem(state, level, pos, player)).isPresent())
             return InteractionResult.SUCCESS;
-        if (level.getBlockEntity(pos, ModBlockEntityTypes.TWINNED_EFFIGY)
-                .filter(entity -> entity.useWithoutItem(state, level, pos, player)).isPresent()) {
-            return InteractionResult.SUCCESS;
-        } else {
+        else
             return InteractionResult.FAIL;
-        }
     }
 
     @Override
