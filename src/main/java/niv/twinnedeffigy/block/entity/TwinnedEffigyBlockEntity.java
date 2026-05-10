@@ -15,12 +15,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import niv.twinnedeffigy.block.TwinnedEffigyBlock;
 import niv.twinnedeffigy.registry.ModBlockEntityTypes;
 import niv.twinnedeffigy.util.ReducedInventoryStorage;
 
@@ -40,18 +42,25 @@ public class TwinnedEffigyBlockEntity extends BlockEntity {
         super(ModBlockEntityTypes.TWINNED_EFFIGY, worldPosition, blockState);
     }
 
-    public boolean tryBoundToggle(final Player player) {
+    @SuppressWarnings("null")
+    public boolean useWithoutItem(BlockState state, Level level, BlockPos pos, Player player) {
         if (canUnlock(this.getBlockPos().getCenter(), player, this.lockKey)) {
+            var wasBound = this.profile != null;
+
             if (this.profile == null)
                 this.profile = ResolvableProfile.createResolved(player.getGameProfile());
             else if (this.profile.partialProfile().id() == player.getGameProfile().id())
                 this.profile = null;
             else
                 this.profile = ResolvableProfile.createResolved(player.getGameProfile());
+
+            var isBound = this.profile != null;
+            if (wasBound != isBound)
+                level.setBlockAndUpdate(pos, state.setValue(TwinnedEffigyBlock.LIT, isBound));
+
             return true;
-        } else {
+        } else
             return false;
-        }
     }
 
     public @Nullable Storage<ItemVariant> getStorage() {
@@ -99,7 +108,8 @@ public class TwinnedEffigyBlockEntity extends BlockEntity {
         super.collectImplicitComponents(components);
         if (!this.lockKey.equals(LockCode.NO_LOCK))
             components.set(DataComponents.LOCK, this.lockKey);
-        components.set(DataComponents.PROFILE, this.profile);
+        if (this.profile != null)
+            components.set(DataComponents.PROFILE, this.profile);
     }
 
     @SuppressWarnings("deprecation")

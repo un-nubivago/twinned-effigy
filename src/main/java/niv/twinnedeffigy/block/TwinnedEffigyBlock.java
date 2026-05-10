@@ -8,16 +8,20 @@ import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import niv.twinnedeffigy.block.entity.TwinnedEffigyBlockEntity;
 import niv.twinnedeffigy.registry.ModBlockEntityTypes;
@@ -26,11 +30,15 @@ import niv.twinnedeffigy.registry.ModItems;
 @NullMarked
 public class TwinnedEffigyBlock extends BaseEntityBlock {
 
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
+
     @SuppressWarnings("null")
     public static final MapCodec<TwinnedEffigyBlock> CODEC = simpleCodec(TwinnedEffigyBlock::new);
 
+    @SuppressWarnings("null")
     public TwinnedEffigyBlock(Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
     }
 
     // BaseEntityBlock
@@ -66,17 +74,34 @@ public class TwinnedEffigyBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected InteractionResult useItemOn(
-            ItemStack stack, BlockState state, Level level, BlockPos pos,
-            Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(LIT);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(
+            BlockState state, Level level, BlockPos pos,
+            Player player, BlockHitResult hitResult) {
         if (level.isClientSide())
             return InteractionResult.SUCCESS;
         if (level.getBlockEntity(pos, ModBlockEntityTypes.TWINNED_EFFIGY)
-                .filter(entity -> entity.tryBoundToggle(player)).isPresent()) {
+                .filter(entity -> entity.useWithoutItem(state, level, pos, player)).isPresent()) {
             return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.FAIL;
         }
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+        var state = super.getStateForPlacement(context);
+        if (state == null)
+            state = this.defaultBlockState();
+
+        state = state.setValue(LIT, context.getItemInHand().get(DataComponents.PROFILE) != null);
+
+        return state;
     }
 
     @Override

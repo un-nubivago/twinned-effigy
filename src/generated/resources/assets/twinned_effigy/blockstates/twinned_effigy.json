@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "twinned_effigy:block/twinned_effigy"
+    },
+    "lit=true": {
+      "model": "twinned_effigy:block/twinned_effigy_on"
+    }
+  }
+}

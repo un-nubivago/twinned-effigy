@@ -36,11 +36,11 @@
                   "source": "block_entity"
                 }
               ],
-              "name": "twinned-effigy:twinned_effigy"
+              "name": "twinned_effigy:twinned_effigy"
             },
             {
               "type": "minecraft:item",
-              "name": "twinned-effigy:twinned_effigy"
+              "name": "twinned_effigy:twinned_effigy"
             }
           ]
         }
@@ -48,5 +48,5 @@
       "rolls": 1.0
     }
   ],
-  "random_sequence": "twinned-effigy:blocks/twinned_effigy"
+  "random_sequence": "twinned_effigy:blocks/twinned_effigy"
 }

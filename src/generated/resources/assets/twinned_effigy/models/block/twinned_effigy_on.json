@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "twinned_effigy:block/twinned_effigy_top",
+    "side": "twinned_effigy:block/twinned_effigy_side_on"
+  }
+}

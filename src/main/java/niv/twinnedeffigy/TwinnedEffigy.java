@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 @NullMarked
 public class TwinnedEffigy implements ModInitializer {
 
-    public static final String MOD_ID = "twinned-effigy";
+    public static final String MOD_ID = "twinned_effigy";
 
     public static final String MOD_NAME = "Twinned Effigy";
 

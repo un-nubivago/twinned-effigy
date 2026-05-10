@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "id": "twinned-effigy",
+    "id": "twinned_effigy",
     "version": "${mod_version}",
     "name": "Twinned Effigy",
     "description": "This is an example description! Tell everyone what your mod is about!",
@@ -12,7 +12,7 @@
         "sources": "https://github.com/un-nubivago/twinned-effigy"
     },
     "license": "MIT",
-    "icon": "assets/twinned-effigy/icon.png",
+    "icon": "assets/twinned_effigy/icon.png",
     "environment": "*",
     "entrypoints": {
         "main": [

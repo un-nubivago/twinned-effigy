@@ -1,8 +1,9 @@
 package niv.twinnedeffigy.client;
 
-import static net.minecraft.client.data.models.BlockModelGenerators.plainVariant;
-import static net.minecraft.client.data.models.blockstates.MultiVariantGenerator.dispatch;
-import static net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction.copyComponentsFromBlockEntity;
+import static net.minecraft.client.data.models.model.ModelTemplates.CUBE_TOP;
+import static net.minecraft.client.data.models.model.TextureSlot.SIDE;
+import static net.minecraft.client.data.models.model.TexturedModel.COLUMN;
+import static niv.twinnedeffigy.block.TwinnedEffigyBlock.LIT;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -17,18 +18,20 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
-import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootContext.BlockEntityTarget;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import niv.twinnedeffigy.TwinnedEffigy;
 import niv.twinnedeffigy.block.entity.TwinnedEffigyBlockEntity;
@@ -62,14 +65,27 @@ public class TwinnedEffigyDataGenerator implements DataGeneratorEntrypoint {
 
         @Override
         public void generateBlockStateModels(BlockModelGenerators generators) {
-            var model = ModelLocationUtils.getModelLocation(Blocks.CHISELED_STONE_BRICKS);
-            generators.blockStateOutput.accept(dispatch(ModBlocks.TWINNED_EFFIGY, plainVariant(model)));
-            generators.registerSimpleItemModel(ModBlocks.TWINNED_EFFIGY, model);
+            var block = ModBlocks.TWINNED_EFFIGY;
+
+            var unlit = BlockModelGenerators.plainVariant(COLUMN.create(block, generators.modelOutput));
+            var lit = BlockModelGenerators.plainVariant(COLUMN.get(block)
+                    .updateTextures(mapping -> mapping.put(SIDE, TextureMapping.getBlockTexture(block, "_side_on")))
+                    .createWithSuffix(block, "_on", generators.modelOutput));
+
+            generators.blockStateOutput.accept(
+                    MultiVariantGenerator.dispatch(block)
+                            .with(BlockModelGenerators.createBooleanModelDispatch(LIT, lit, unlit)));
         }
 
         @Override
-        public void generateItemModels(ItemModelGenerators itemModelGenerators) {
-            // no item models to generate
+        public void generateItemModels(ItemModelGenerators generators) {
+            var block = ModBlocks.TWINNED_EFFIGY;
+            var item = ModItems.TWINNED_EFFIGY;
+
+            generators.generateBooleanDispatch(item,
+                    ItemModelUtils.hasComponent(DataComponents.PROFILE),
+                    ItemModelUtils.plainModel(CUBE_TOP.getDefaultModelLocation(block).withSuffix("_on")),
+                    ItemModelUtils.plainModel(CUBE_TOP.getDefaultModelLocation(block)));
         }
     }
 
@@ -88,7 +104,7 @@ public class TwinnedEffigyDataGenerator implements DataGeneratorEntrypoint {
             builder.add(ModBlocks.TWINNED_EFFIGY, nameOfTwinnedEffigy);
             builder.add(ModItems.TWINNED_EFFIGY, nameOfTwinnedEffigy);
             builder.add(TwinnedEffigyBlockEntity.CONTAINER_NAME, nameOfTwinnedEffigy);
-            builder.add(TwinnedEffigyItem.BOUND_NAME, "%s's " + nameOfTwinnedEffigy);
+            builder.add(TwinnedEffigyItem.BOUND_NAME, nameOfTwinnedEffigy + " of %s");
         }
     }
 
@@ -106,7 +122,9 @@ public class TwinnedEffigyDataGenerator implements DataGeneratorEntrypoint {
                             .setRolls(ConstantValue.exactly(1))
                             .add(LootItem.lootTableItem(ModItems.TWINNED_EFFIGY)
                                     .when(hasSilkTouch())
-                                    .apply(copyComponentsFromBlockEntity(BlockEntityTarget.BLOCK_ENTITY.contextParam())
+                                    .apply(CopyComponentsFunction
+                                            .copyComponentsFromBlockEntity(
+                                                    BlockEntityTarget.BLOCK_ENTITY.contextParam())
                                             .include(DataComponents.LOCK)
                                             .include(DataComponents.PROFILE))
                                     .otherwise(LootItem.lootTableItem(ModItems.TWINNED_EFFIGY))))
