@@ -3,7 +3,7 @@
     "id": "twinned_effigy",
     "version": "${mod_version}",
     "name": "Twinned Effigy",
-    "description": "This is an example description! Tell everyone what your mod is about!",
+    "description": "Entwine your player inventory with this strange effigy, enabling remote hopper extraction, insertion, and storage automation, even across dimensions.",
     "authors": [
         "Nubìvago"
     ],

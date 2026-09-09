@@ -20,7 +20,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
-import net.minecraft.world.level.block.Blocks;
 import niv.twinnedeffigy.item.TwinnedEffigyItem;
 
 @SuppressWarnings("null")
@@ -47,9 +46,9 @@ public class ModItems {
                 BuiltInRegistries.CREATIVE_MODE_TAB,
                 fromNamespaceAndPath(MOD_ID, "tab"),
                 FabricCreativeModeTab.builder()
-                        .icon(Blocks.LODESTONE.asItem()::getDefaultInstance)
+                        .icon(TWINNED_EFFIGY::getDefaultInstance)
                         .title(Component.translatable(CREATIVE_TAB_NAME))
-                        .displayItems((parameters, output) -> output.accept(ModItems.TWINNED_EFFIGY))
+                        .displayItems((parameters, output) -> output.accept(TWINNED_EFFIGY))
                         .build());
     }
 
