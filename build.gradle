@@ -114,7 +114,6 @@ modrinth {
     syncBodyFrom = "sh README.sh".execute().text
     dependencies {
         required.project "fabric-api"
-        required.project "burning"
     }
     debugMode = true
 }
