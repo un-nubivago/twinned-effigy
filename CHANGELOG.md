@@ -6,5 +6,5 @@
 
 First release.
 
-[Unreleased]: https://github.com/un-nubivago/twinned-effigy/compare/0.1...HEAD
+[Unreleased]: https://github.com/un-nubivago/twinned-effigy/compare/1.0...HEAD
 [1.0]: https://github.com/un-nubivago/twinned-effigy/releases/tag/1.0
