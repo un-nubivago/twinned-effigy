@@ -46,7 +46,7 @@ public class TwinnedEffigyBlockEntity extends BlockEntity {
 
     @SuppressWarnings("null")
     public boolean useWithoutItem(BlockState state, Level level, BlockPos pos, Player player) {
-        if (canUnlock(this.getBlockPos().getCenter(), player, this.lockKey)) {
+        if (canUnlock(this.getBlockPos(), player, this.lockKey)) {
             var wasBound = this.profile != null;
 
             if (this.profile != null && this.profile.partialProfile().id() == player.getGameProfile().id()) {
@@ -125,11 +125,12 @@ public class TwinnedEffigyBlockEntity extends BlockEntity {
 
     // static
 
-    public static boolean canUnlock(final Vec3 pos, final Player player, final LockCode code) {
+    public static boolean canUnlock(final BlockPos pos, final Player player, final LockCode code) {
         if (code.unlocksWith(player.getMainHandItem()) || code.unlocksWith(player.getOffhandItem())) {
             return true;
         } else {
-            BaseContainerBlockEntity.sendChestLockedNotifications(pos, player, DEFAULT_NAME);
+            var vec = Vec3.atCenterOf(pos);
+            BaseContainerBlockEntity.sendChestLockedNotifications(vec, player, DEFAULT_NAME);
             return false;
         }
     }

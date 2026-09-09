@@ -56,5 +56,5 @@ jobs:
           gh release create $tag ./build/libs/*.jar \
               --draft --verify-tag \
               --repo "$GITHUB_REPOSITORY" \
-              --title "Heater $tag" \
+              --title "Twinned Effigy $tag" \
               --notes "$(./CHANGELOG.sh)"
