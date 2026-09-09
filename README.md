@@ -4,7 +4,7 @@
 
 The inspiration for this mod loosely comes from **cubicmetre**'s video "The Crisis in Storage Tech". Namely, it's an attempt to lessen the crisis by implementing something based on the "shadowed item stacks" bug shown at [24:15](https://youtu.be/GyUL3PbjWcw?t=1455).
 
-[![The Crisis in Storage Tech](https://img.youtube.com/vi/GyUL3PbjWcw/maxresdefault.jpg)](https://www.youtube.com/watch?v=GyUL3PbjWcw)
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/GyUL3PbjWcw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 Now, the **Twinned Effigy** is crafted as follows:
 
