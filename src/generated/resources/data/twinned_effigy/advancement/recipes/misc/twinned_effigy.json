@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "twinned_effigy:twinned_effigy"
+        "recipes": "twinned_effigy:twinned_effigy"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

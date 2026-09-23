@@ -3,8 +3,6 @@ package niv.twinnedeffigy.block;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import com.mojang.serialization.MapCodec;
-
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,27 +31,15 @@ public class TwinnedEffigyBlock extends BaseEntityBlock {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
     @SuppressWarnings("null")
-    public static final MapCodec<TwinnedEffigyBlock> CODEC = simpleCodec(TwinnedEffigyBlock::new);
-
-    @SuppressWarnings("null")
     public TwinnedEffigyBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
-    }
-
-    // BaseEntityBlock
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos worldPosition, BlockState blockState) {
         return new TwinnedEffigyBlockEntity(worldPosition, blockState);
     }
-
-    // Block
 
     @Override
     protected void affectNeighborsAfterRemoval(

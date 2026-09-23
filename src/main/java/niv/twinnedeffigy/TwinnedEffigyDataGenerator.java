@@ -1,4 +1,4 @@
-package niv.twinnedeffigy.client;
+package niv.twinnedeffigy;
 
 import static net.minecraft.client.data.models.model.ModelTemplates.CUBE_TOP;
 import static net.minecraft.client.data.models.model.TextureSlot.SIDE;
@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
@@ -27,18 +28,18 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext.BlockEntityTarget;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import niv.twinnedeffigy.TwinnedEffigy;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import niv.twinnedeffigy.block.entity.TwinnedEffigyBlockEntity;
 import niv.twinnedeffigy.item.TwinnedEffigyItem;
 import niv.twinnedeffigy.registry.ModBlockEntityTypes;
@@ -125,7 +126,7 @@ public class TwinnedEffigyDataGenerator implements DataGeneratorEntrypoint {
         public void generate() {
             add(ModBlocks.TWINNED_EFFIGY, LootTable.lootTable()
                     .withPool(LootPool.lootPool()
-                            .setRolls(ConstantValue.exactly(1))
+                            .setRolls(ContextIntProviders.exactly(1))
                             .add(LootItem.lootTableItem(ModItems.TWINNED_EFFIGY)
                                     .when(hasSilkTouch())
                                     .apply(CopyComponentsFunction
@@ -151,8 +152,9 @@ public class TwinnedEffigyDataGenerator implements DataGeneratorEntrypoint {
         }
 
         @Override
-        protected RecipeProvider createRecipeProvider(Provider registries, RecipeOutput output) {
-            return new RecipeProvider(registries, output) {
+        protected RecipeProvider createRecipeProvider(
+                Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+            return new RecipeProvider(recipes, advancements) {
                 @Override
                 public void buildRecipes() {
                     shaped(RecipeCategory.MISC, ModItems.TWINNED_EFFIGY)
@@ -175,7 +177,7 @@ public class TwinnedEffigyDataGenerator implements DataGeneratorEntrypoint {
             super(output, Registries.BLOCK, registryLookupFuture);
         }
 
-        @SuppressWarnings("java:S4449")
+        @SuppressWarnings({ "java:S4449", "null" })
         @Override
         protected void addTags(Provider registries) {
             builder(BlockTags.MINEABLE_WITH_PICKAXE)

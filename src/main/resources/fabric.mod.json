@@ -18,11 +18,8 @@
         "main": [
             "niv.twinnedeffigy.TwinnedEffigy"
         ],
-        "client": [
-            "niv.twinnedeffigy.client.TwinnedEffigyClient"
-        ],
         "fabric-datagen": [
-            "niv.twinnedeffigy.client.TwinnedEffigyDataGenerator"
+            "niv.twinnedeffigy.TwinnedEffigyDataGenerator"
         ]
     },
     "depends": {
